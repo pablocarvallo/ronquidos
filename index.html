@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Ronquidos</title>
 <!--STANDALONE:START-->
 <meta name="robots" content="noindex, nofollow">
@@ -183,6 +183,9 @@ input, select, textarea { accent-color: var(--ds-btn); caret-color: var(--ds-tin
 html.lock { overflow: hidden; }
 [hidden] { display: none !important; }
 body { margin: 0; padding-inline: 16px; font-size: 17px; line-height: 1.38; letter-spacing: -0.012em; -webkit-text-size-adjust: 100%; }
+/* Sin zoom: ni con dos dedos ni con doble toque (Safari ignora user-scalable; el bloqueo real está en el script) */
+html, body { touch-action: pan-x pan-y; }
+button, a, input, label, .row, .seg, .sw { touch-action: manipulation; }
 .app { max-width: 480px; margin: 0 auto; padding-block: 14px 48px; display: flex; flex-direction: column; gap: 22px; }
 button, input, textarea { font: inherit; color: inherit; letter-spacing: inherit; }
 button { cursor: pointer; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
@@ -1784,6 +1787,16 @@ recover().then(prune).catch(function () {}).then(render);
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
 }
+// ── Sin zoom con los dedos ──────────────────────────────────────────────────────
+// Safari en iPhone ignora «user-scalable=no»: se cancelan los gestos de pellizco y el arrastre con dos dedos.
+// El doble toque ya no hace zoom gracias a «touch-action» en el CSS.
+['gesturestart', 'gesturechange', 'gestureend'].forEach(function (t) {
+  document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false });
+});
+document.addEventListener('touchmove', function (e) {
+  if (e.touches.length > 1 || (typeof e.scale === 'number' && e.scale !== 1)) e.preventDefault();
+}, { passive: false });
+
 // Para pruebas en el navegador de escritorio
 window.__ronquidos = { DB: DB, render: render, Detector: Detector };
 
