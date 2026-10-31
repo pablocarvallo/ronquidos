@@ -47,7 +47,7 @@ La **sensibilidad** (Ajustes) cambia cuánto debe sobresalir del fondo y qué ta
 
 ## Detalles técnicos
 
-- Un solo `index.html` con el sistema de diseño común de las apps domésticas (marcas `DS:TOKENS` y `DS:LAYER`).
+- Un solo `index.html` con el sistema de diseño común de las apps domésticas (marcas `DS:TOKENS`, `DS:VARS`, `DS:BASE` y `DS:APP`; la base común se copia desde el repositorio casa).
 - El motor de detección está entre `/*MOTOR:START*/ … /*MOTOR:END*/`.
 - Audio: Web Audio con AudioWorklet (o ScriptProcessor en iPhones antiguos). Las grabaciones se guardan como WAV mono de 16 bits a 8 kHz (unos 16 KB por segundo).
 - Datos: IndexedDB `ronquidos`, con las noches (`nights`) y los audios (`audio`) por separado. Ajustes en `localStorage`.
